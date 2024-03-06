@@ -57,6 +57,24 @@ namespace _2024Evaluation.DAL
                 Title = "MyFirstEvent",
                 Description = "I'm the Description of the first event",
                 Location = "I'm the location of the first event",
+            },
+            new Event()
+            {
+                Id = 2,
+                Date = new DateTime(2024, 2, 20, 0, 0, 0, DateTimeKind.Utc),
+                Time = TimeSpan.FromHours(6).Add(TimeSpan.FromMinutes(30).Add(TimeSpan.FromSeconds(45))),
+                Title = "MySecondEvent",
+                Description = "I'm the Description of the second event",
+                Location = "I'm the location of the second event",
+            },
+            new Event()
+            {
+                Id = 3,
+                Date = new DateTime(2024, 3, 15, 0, 0, 0, DateTimeKind.Utc),
+                Time = TimeSpan.FromHours(7).Add(TimeSpan.FromMinutes(20).Add(TimeSpan.FromSeconds(10))),
+                Title = "MyThirdEvent",
+                Description = "I'm the Description of the third event",
+                Location = "I'm the location of the third event",
             });
         }
     }

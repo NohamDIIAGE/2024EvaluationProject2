@@ -51,5 +51,59 @@ namespace _2024Evaluation.Azure
 
             return response;
         }
+
+        [Function("DeleteEvents")]
+        public async Task<HttpResponseData> DeleteProfile([HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "Events/{id}")] HttpRequestData req, int id)
+        {
+            this._logger.LogInformation("Starting of DeleteEvent method");
+            string errorMessage = "Error deleting event :";
+
+            var response = req.CreateResponse(HttpStatusCode.NoContent);
+
+            try
+            {
+                await this._eventService.DeleteEvent(id);
+            }
+
+            catch (Exception ex)
+            {
+                this._logger.LogError("{errorMessage} {ex.Message}", errorMessage, ex.Message);
+                response.StatusCode = HttpStatusCode.InternalServerError;
+                response.WriteString($"{errorMessage} {ex.Message}");
+            }
+
+            return response;
+        }
+
+        [Function("GetEventById")]
+        public async Task<HttpResponseData> GetEventById([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Events/{id}")] HttpRequestData req, int id)
+        {
+            _logger.LogInformation("C# HTTP trigger function processed a request for event with id: {id}.", id);
+            string errorMessage = "Error retriving event by id:";
+
+            var response = req.CreateResponse();
+            try
+            {
+                var myEvent = await this._eventService.GetEventById(id);
+
+                if (myEvent == null)
+                {
+                    response.StatusCode = HttpStatusCode.NotFound;
+                }
+                else
+                {
+                    await response.WriteAsJsonAsync(myEvent);
+                }
+            }
+
+            catch (Exception ex)
+            {
+                this._logger.LogError("{errorMessage} {ex.Message}", errorMessage, ex.Message);
+                response.StatusCode = HttpStatusCode.InternalServerError;
+                response.WriteString($"{errorMessage} {ex.Message}");
+            }
+
+            return response;
+        }
     }
 }

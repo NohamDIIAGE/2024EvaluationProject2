@@ -12,6 +12,8 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Text;
 using System.Net;
+using _2024Evaluation.Services.Contracts.DTO.Up;
+
 
 
 namespace _2024Evaluation.Azure
@@ -101,6 +103,49 @@ namespace _2024Evaluation.Azure
                 this._logger.LogError("{errorMessage} {ex.Message}", errorMessage, ex.Message);
                 response.StatusCode = HttpStatusCode.InternalServerError;
                 response.WriteString($"{errorMessage} {ex.Message}");
+            }
+
+            return response;
+        }
+
+
+        [Function("CreateEvent")]
+        public async Task<HttpResponseData> CreateEvents([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "Events")] HttpRequestData req)
+        {
+            var response = req.CreateResponse();
+            string errorMessage = "Error saving event:";
+
+            string requestBody;
+            using (var reader = new StreamReader(req.Body, Encoding.UTF8))
+            {
+                requestBody = await reader.ReadToEndAsync();
+            }
+            try
+            {
+                var myEvent = JsonSerializer.Deserialize<EventUpDetailedDTO>(requestBody, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+                var savedProfile = await this._eventService.SaveProfile(myEvent!);
+                await response.WriteAsJsonAsync(savedProfile);
+                response.StatusCode = HttpStatusCode.Created;
+            }
+
+            catch (JsonException ex)
+            {
+                this._logger.LogError("{errorMessage} {ex.Message}", errorMessage, ex.Message);
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
+                response.Body = new MemoryStream(Encoding.UTF8.GetBytes($"Bad input in argument {errorMessage} {ex.Message}"));
+            }
+
+            catch (Exception ex)
+            {
+                this._logger.LogError("{errorMessage} {ex.Message}", errorMessage, ex.Message);
+                response.StatusCode = HttpStatusCode.InternalServerError;
+                response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
+                response.Body = new MemoryStream(Encoding.UTF8.GetBytes($"{errorMessage} {ex.Message}"));
             }
 
             return response;

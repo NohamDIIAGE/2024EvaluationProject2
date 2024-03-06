@@ -2,6 +2,7 @@
 using _2024Evaluation.Models;
 using _2024Evaluation.Services.Contracts;
 using _2024Evaluation.Services.Contracts.DTO.Down;
+using _2024Evaluation.Services.Contracts.DTO.Up;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -42,5 +43,38 @@ namespace _2024Evaluation.Services
                 Location = myEvent.Location,
             };
         }
+
+        public async Task<EventDownDetailedDTO> SaveProfile(EventUpDetailedDTO eventDTO)
+        {
+            try
+            {
+                var newEvent = new Event
+                {
+                    Title = eventDTO.Title,
+                    Description = eventDTO.Description,
+                    Date = eventDTO.Date,
+                    Time = eventDTO.Time,
+                    Location = eventDTO.Location
+                };
+
+                await _eventRepository.SaveEvent(newEvent);
+
+                return new EventDownDetailedDTO
+                {
+                    Id = newEvent.Id,
+                    Title = newEvent.Title,
+                    Description = newEvent.Description,
+                    Date = newEvent.Date,
+                    Time = newEvent.Time,
+                    Location = newEvent.Location
+                };
+            }
+            catch (Exception ex)
+            {
+                // Gérer les erreurs
+                throw new Exception("Error saving event", ex);
+            }
+        }
+
     }
 }

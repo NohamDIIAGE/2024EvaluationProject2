@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using _2024Evaluation.Services.Contracts.DTO.Down;
+using _2024Evaluation.Services.Contracts.DTO.Up;
 
 namespace _2024Evaluation.Services.Contracts
 {
@@ -12,6 +13,8 @@ namespace _2024Evaluation.Services.Contracts
         Task DeleteEvent(int idEvent);
 
         Task<EventDownDetailedDTO> GetEventById(int idEvent);
+
+        Task<EventDownDetailedDTO> SaveProfile(EventUpDetailedDTO profileDTO);
 
     }
 }

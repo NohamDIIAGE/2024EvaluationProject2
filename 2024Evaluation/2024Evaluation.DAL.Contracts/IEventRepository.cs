@@ -13,5 +13,7 @@ namespace _2024Evaluation.DAL.Contracts
 
         Task<Event> GetEventById(int idEvent);
 
+        Task SaveEvent(Event myEvent);
+
     }
 }

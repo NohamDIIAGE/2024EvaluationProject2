@@ -32,5 +32,19 @@ namespace _2024Evaluation.DAL.Repositories
         {
             return await this._dbContext.Events.SingleAsync(p => p.Id == idEvent);
         }
+
+        public async Task SaveEvent(Event myEvent)
+        {
+            try
+            {
+                _dbContext.Events.Add(myEvent);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error saving event", ex);
+            }
+        }
+
     }
 }

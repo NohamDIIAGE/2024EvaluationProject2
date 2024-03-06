@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\2024Evaluation.DAL\2024Evaluation.DAL.csproj" />
     <ProjectReference Include="..\2024Evaluation.Services.Contracts\2024Evaluation.Services.Contracts.csproj" />
   </ItemGroup>
 
